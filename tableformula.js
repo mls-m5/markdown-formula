@@ -22,13 +22,22 @@
     }
 
     function evaluateCell(cell, i, j) {
+        if (typeof cell==="undefined") {
+            throw "cell does not exist";
+        }
+
         if (!cell.hasOwnProperty("tempValue")) {
             cell.tempValue = cell.innerText.trim();
         }
 
         if (typeof cell.tempValue === "string" && cell.tempValue.startsWith("=")) {
             let old = cell.tempValue;
-            cell.innerText = cell.tempValue = run(cell.tempValue.substring(1));
+            try {
+                cell.innerText = cell.tempValue = run(cell.tempValue.substring(1));
+            }
+            catch(e) {
+                cell.innerText = cell.tempValue = "<i>invalid formula <i> + cell.tempValue";
+            }
             if (typeof cell.tempValue === "undefined") {
                 throw "";
             }
@@ -62,13 +71,11 @@
             window.row = i;
             for (let j = 0, col; col = row.cells[j], j < row.cells.length; ++j) {
                 let text = col.innerText.trim();
-                if (text.length > 0 && text[0] === "=") {
-                    //let result = run(text.substring(1));
-                    //console.log("formula ", text.substring(1), " -> ", result);
-                    //col.innerText = result;
-                    shouldAutoFill[j] = false;
-                } else if (text === "...") {
+                if (text === "...") {
                     shouldAutoFill[j] = true;
+                }
+                else if (text.length > 0) {
+                    shouldAutoFill[j] = false;
                 }
 
                 if (text === "" || text === "...") {

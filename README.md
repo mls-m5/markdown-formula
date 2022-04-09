@@ -50,6 +50,26 @@ will create
 | 1   | 100           |
 | 2   | 200           |
 
+## Figure 4: Evaluate from bottom upwards
+
+| r   | amount | difference                   |
+| --- | ------ | ---------------------------- |
+| 1   | 100    | = amount() - amount(row + 1) |
+| ... | 200    | ...                          | 
+|     | 250    |                              |
+|     | 275    | 0                            |
+
+(Note that the evaluation is done to the cell below)
+
+This yields
+
+| r   | amount | difference                   |
+| --- | ------ | ---------------------------- |
+| 1   | 100    | -100                         |
+| ... | 200    | -50                          | 
+|     | 250    | -25                          |
+|     | 275    | 0                            |
+
 
 ## Syntax
 
