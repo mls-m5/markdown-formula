@@ -17,8 +17,8 @@ file(READ tableformula.js markdown_formula)
 file(READ evaluate.js markdown_evaluate)
 
 configure_file(
-    include/tables/tableformula.h
-    ${CMAKE_CURRENT_BINARY_DIR}/include/${PROJECT_NAME}
+    include/tableformula.h
+    ${CMAKE_CURRENT_BINARY_DIR}/include/${PROJECT_NAME}/tableformula.h
     )
 
 configure_file(
