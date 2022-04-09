@@ -13,8 +13,19 @@ target_include_directories(
     ${CMAKE_CURRENT_BINARY_DIR}/include/
     )
 
-file(
-    COPY include/tables/tableformula.h
-    DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/include/${PROJECT_NAME}
+file(READ tableformula.js markdown_formula)
+file(READ evaluate.js markdown_evaluate)
+
+configure_file(
+    include/tables/tableformula.h
+    ${CMAKE_CURRENT_BINARY_DIR}/include/${PROJECT_NAME}
     )
+
+configure_file(
+    README.md
+    .
+    COPY_ONLY
+    )
+
+
 
