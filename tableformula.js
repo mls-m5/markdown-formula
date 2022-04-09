@@ -42,10 +42,11 @@ function processTable(table) {
     let prevText = {};
     let shouldAutoFill = {};
 
-    for (var i = 0, row; row = table.rows[i]; ++i) {
+    for (let i = 0; i < table.rows.length; ++i) {
+        let row = table.rows[i];
         currentRow = i;
         window.row = i;
-        for (var j = 0, col; col = row.cells[j], j < row.cells.length; ++j) {
+        for (let j = 0, col; col = row.cells[j], j < row.cells.length; ++j) {
             let text = col.innerText.trim();
             if (text.length > 0 && text[0] === "=") {
                 let result = run(text.substring(1));
@@ -57,10 +58,10 @@ function processTable(table) {
                 shouldAutoFill[j] = true;
             }
 
-            if (text === "" || text == "...") {
+            if (text === "" || text === "...") {
                 if (shouldAutoFill[j]) {
                     text = prevText[j];
-                    if (text[0] == "=") {
+                    if (text[0] === "=") {
                         col.innerText = run(text.substring(1));
                     }
                     else {
