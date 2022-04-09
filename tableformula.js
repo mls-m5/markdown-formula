@@ -2,8 +2,6 @@
 
 (function() {
     let tables = document.getElementsByTagName("table");
-    let currentRow = 0;
-
     let context = {};
 
     function getText(table, i, j) {
@@ -17,23 +15,29 @@
         if (isNaN(text)) {
             return text;
         } else {
-            return number(text);
+            return Number(text);
         }
     }
 
-    function evaluateCell(cell, i, j) {
+    function evaluateCell(cell) {
         if (typeof cell==="undefined") {
             throw "cell does not exist";
         }
+
+        let i = cell.row;
+        let j = cell.col;
 
         if (!cell.hasOwnProperty("tempValue")) {
             cell.tempValue = cell.innerText.trim();
         }
 
+        let oldCell = context.cell;
+        context.cell = cell;
+
         if (typeof cell.tempValue === "string" && cell.tempValue.startsWith("=")) {
             let old = cell.tempValue;
             try {
-                cell.innerText = cell.tempValue = run(cell.tempValue.substring(1));
+                cell.innerText = cell.tempValue = run(cell.tempValue.substring(1), i, j, context);
             }
             catch(e) {
                 cell.innerText = cell.tempValue = "<i>invalid formula <i> + cell.tempValue";
@@ -43,21 +47,23 @@
             }
         }
 
-        return cell.innerText;
+        context.cell = oldCell;
+
+        return convert(cell.innerText);
     }
 
 
     function evaluateTable(table) {
-        for (var i = 0; i < table.rows[0].cells.length; ++i) {
+        for (let i = 0; i < table.rows[0].cells.length; ++i) {
             let name = table.rows[0].cells[i].innerText;
 
             let j = i; // To not capture changing value
-            window[name] = function(row) {
+            context[name] = function(row) {
                 if (typeof row === "undefined") {
-                    row = window.row;
+                    row = context.cell.row;
                 }
 
-                return evaluateCell(table.rows[row].cells[j]);
+                return evaluateCell(table.rows[row].cells[j], row, j);
             }
         }
 
@@ -67,9 +73,12 @@
 
         for (let i = 0; i < table.rows.length; ++i) {
             let row = table.rows[i];
-            currentRow = i;
-            window.row = i;
-            for (let j = 0, col; col = row.cells[j], j < row.cells.length; ++j) {
+
+            for (let j = 0; j < row.cells.length; ++j) {
+                let col = row.cells[j];
+                col.row = i;
+                col.col = j;
+
                 let text = col.innerText.trim();
                 if (text === "...") {
                     shouldAutoFill[j] = true;
@@ -82,7 +91,7 @@
                     if (shouldAutoFill[j]) {
                         text = prevText[j];
                         if (text[0] === "=") {
-                            col.innerText = run(text.substring(1));
+                            col.innerText = text; //run(text.substring(1));
                         } else {
                             text = +text + 1;
                             col.innerText = text;
@@ -92,9 +101,13 @@
                 prevText[j] = text;
             }
 
+        }
+
+        for (let i = 0; i < table.rows.length; ++i) {
+            let row = table.rows[i];
             for (let j = 0; j < row.cells.length; ++j) {
                 let cell = row.cells[j];
-                evaluateCell(cell, i, j);
+                evaluateCell(cell);
             }
         }
     }
@@ -111,5 +124,18 @@
             start();
         }
     });
+
+
+    function run(code, row, col, context) {
+        try {
+            let keys = Object.keys(context);
+
+            return Function("row", "col", keys, "return " + code)(row, col, ...Object.values(context));
+        }
+        catch(e) {
+            console.log("could not run code: ", code)
+            return "<invalid formula>";
+        }
+    }
 
 })();

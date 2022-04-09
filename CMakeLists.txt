@@ -14,7 +14,6 @@ target_include_directories(
     )
 
 file(READ tableformula.js markdown_formula)
-file(READ evaluate.js markdown_evaluate)
 
 configure_file(
     include/tableformula.h

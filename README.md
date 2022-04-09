@@ -71,6 +71,24 @@ This yields
 |     | 275    | 0                            |
 
 
+## Figure 5: Recursive formulas
+
+| r   | down                | up               |
+| --- | ------------------- | ---------------- |
+| 1   | 100                 | = up(row + 1) -1 |
+| ... | = down(row - 1) + 1 | ...              |
+|     | ...                 |                  |
+|     |                     | 200              |
+
+Will result in the following:
+
+| r   | down | up  |
+| --- | ---- | --- |
+| 1   | 100  | 197 | 
+| 2   | 101  | 198 |
+| 3   | 102  | 199 |
+| 4   | 103  | 200 |
+
 ## Syntax
 
 | command     | meaning                                    | 
