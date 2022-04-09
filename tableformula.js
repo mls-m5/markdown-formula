@@ -1,10 +1,12 @@
-
-
-
 "use strict";
+
+(function () {
 
 let tables = document.getElementsByTagName("table");
 let currentRow = 0;
+
+let conte;
+
 
 function getText(table, i, j) {
     let col = table.rows[i].cells[j];
@@ -22,7 +24,7 @@ function convert(text) {
     }
 }
 
-function processTable(table) {
+function evaluateTable(table) {
     let rowNames = {};
     for (var i = 0; i < table.rows[0].cells.length; ++i) {
         let name = table.rows[0].cells[i].innerText;
@@ -77,7 +79,7 @@ function processTable(table) {
 
 function start() {
     for (let i = 0; i < tables.length; ++i) {
-        processTable(tables[i]);
+        evaluateTable(tables[i]);
     }
 }
 
@@ -88,4 +90,4 @@ document.addEventListener('readystatechange', event => {
     }
 });
 
-
+})();
