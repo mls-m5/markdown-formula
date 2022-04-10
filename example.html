@@ -1,0 +1,126 @@
+<!DOCTYPE html><html><head>   <meta charset="utf-8">   <title>README</title></head><body><p><h1>
+ Calc sheets for markdown files
+</h1>
+</p>
+<p></p>
+<p>Well actually its html table evaluation, but for my usecases it is</p>
+<p>markdown converted to html. That means that the library can be used</p>
+<p>in plain html-projects as well.</p>
+<p></p>
+<p><h2>
+ Figure 1: Basic Example
+</h2>
+</p>
+<p></p>
+<p><table><thead><tr><th> r   </th><th> amount </th><th> num </th><th> result                 </th></tr></thead><tbody></p>
+<p></p>
+<tr><td> 1   </td><td> 100    </td><td> 4   </td><td> = amount() * num() + 1 </td></tr>
+<tr><td> ... </td><td> 200    </td><td> 3   </td><td> ...                    </td></tr>
+<tr><td>     </td><td> 300    </td><td> 1.5 </td><td>                        </td></tr>
+<p><tr></tr></tbody></table></p>
+<p>Will generate</p>
+<p><table><thead><tr><th> r   </th><th> amount </th><th> num </th><th> result                 </th></tr></thead><tbody></p>
+<p></p>
+<tr><td> 1   </td><td> 100    </td><td> 4   </td><td> 401                    </td></tr>
+<tr><td> 2   </td><td> 200    </td><td> 3   </td><td> 601                    </td></tr>
+<tr><td> 3   </td><td> 300    </td><td> 1.5 </td><td> 451                    </td></tr>
+<p><tr></tr></tbody></table></p>
+<p><h2>
+ Figure 2: References to previous rows
+</h2>
+</p>
+<p></p>
+<p><table><thead><tr><th> r   </th><th> amount </th><th> difference                   </th></tr></thead><tbody></p>
+<p></p>
+<tr><td> 1   </td><td> 100    </td><td> 0                            </td></tr>
+<tr><td> ... </td><td> 200    </td><td> = amount() - amount(row - 1) </td></tr>
+<tr><td>     </td><td> 250    </td><td> ...                          </td></tr>
+<tr><td>     </td><td> 275    </td><td>                              </td></tr>
+<p><tr></tr></tbody></table></p>
+<p>Generates</p>
+<p></p>
+<p><table><thead><tr><th> r   </th><th> amount </th><th> difference                   </th></tr></thead><tbody></p>
+<p></p>
+<tr><td> 1   </td><td> 100    </td><td> 0                            </td></tr>
+<tr><td> 2   </td><td> 200    </td><td> 100                          </td></tr>
+<tr><td> 3   </td><td> 250    </td><td> 50                           </td></tr>
+<tr><td> 4   </td><td> 275    </td><td> 25                           </td></tr>
+<p><tr></tr></tbody></table></p>
+<p><h2>
+ Figure 3: Cross references between tables
+</h2>
+</p>
+<p><table><thead><tr><th> r   </th><th> copied        </th></tr></thead><tbody></p>
+<p></p>
+<tr><td> 1   </td><td> = amount(row) </td></tr>
+<tr><td> ... </td><td> ...           </td></tr>
+<p><tr></tr></tbody></table></p>
+<p>will create</p>
+<p></p>
+<p><table><thead><tr><th> r   </th><th> copied        </th></tr></thead><tbody></p>
+<p></p>
+<tr><td> 1   </td><td> 100           </td></tr>
+<tr><td> 2   </td><td> 200           </td></tr>
+<p><tr></tr></tbody></table></p>
+<p><h2>
+ Figure 4: Evaluate from bottom upwards
+</h2>
+</p>
+<p></p>
+<p><table><thead><tr><th> r   </th><th> amount </th><th> difference                   </th></tr></thead><tbody></p>
+<p></p>
+<tr><td> 1   </td><td> 100    </td><td> = amount() - amount(row + 1) </td></tr>
+<tr><td> ... </td><td> 200    </td><td> ...                          </td></tr>
+<tr><td>     </td><td> 250    </td><td>                              </td></tr>
+<tr><td>     </td><td> 275    </td><td> 0                            </td></tr>
+<p><tr></tr></tbody></table></p>
+<p>(Note that the evaluation is done to the cell below)</p>
+<p></p>
+<p>This yields</p>
+<p></p>
+<p><table><thead><tr><th> r   </th><th> amount </th><th> difference                   </th></tr></thead><tbody></p>
+<p></p>
+<tr><td> 1   </td><td> 100    </td><td> -100                         </td></tr>
+<tr><td> ... </td><td> 200    </td><td> -50                          </td></tr>
+<tr><td>     </td><td> 250    </td><td> -25                          </td></tr>
+<tr><td>     </td><td> 275    </td><td> 0                            </td></tr>
+<p><tr></tr></tbody></table></p>
+<p></p>
+<p><h2>
+ Figure 5: Recursive formulas
+</h2>
+</p>
+<p></p>
+<p><table><thead><tr><th> r   </th><th> down                </th><th> up               </th></tr></thead><tbody></p>
+<p></p>
+<tr><td> 1   </td><td> 100                 </td><td> = up(row + 1) -1 </td></tr>
+<tr><td> ... </td><td> = down(row - 1) + 1 </td><td> ...              </td></tr>
+<tr><td>     </td><td> ...                 </td><td>                  </td></tr>
+<tr><td>     </td><td>                     </td><td> 200              </td></tr>
+<p><tr></tr></tbody></table></p>
+<p>Will result in the following:</p>
+<p></p>
+<p><table><thead><tr><th> r   </th><th> down </th><th> up  </th></tr></thead><tbody></p>
+<p></p>
+<tr><td> 1   </td><td> 100  </td><td> 197 </td></tr>
+<tr><td> 2   </td><td> 101  </td><td> 198 </td></tr>
+<tr><td> 3   </td><td> 102  </td><td> 199 </td></tr>
+<tr><td> 4   </td><td> 103  </td><td> 200 </td></tr>
+<p><tr></tr></tbody></table></p>
+<p><h2>
+ Syntax
+</h2>
+</p>
+<p></p>
+<p><table><thead><tr><th> command     </th><th> meaning                                    </th></tr></thead><tbody></p>
+<p></p>
+<tr><td> "="         </td><td> start formula in cell                      </td></tr>
+<tr><td> "..."       </td><td> auto fill cell                             </td></tr>
+<tr><td> row         </td><td> the current row nuber                      </td></tr>
+<tr><td> columname() </td><td> insert value from column named "columname" </td></tr>
+<p><tr></tr></tbody></table></p>
+<p></p>
+<script src="tableformula.js"></script>
+</body></html>
+
+
