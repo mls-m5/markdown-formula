@@ -95,7 +95,7 @@ Will result in the following:
 | ----------- | ------------------------------------------ |
 | "="         | start formula in cell                      |
 | "..."       | auto fill cell                             |
-| row         | the current row nuber                      |
+| row         | the current row number                     |
 | columname() | insert value from column named "columname" |
 
 
