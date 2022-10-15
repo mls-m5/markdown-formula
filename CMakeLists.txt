@@ -16,7 +16,7 @@ target_include_directories(
 file(READ tableformula.js markdown_formula)
 
 configure_file(
-    include/tableformula.h
+    include/markdown-formula/tableformula.h
     ${CMAKE_CURRENT_BINARY_DIR}/include/${PROJECT_NAME}/tableformula.h
     )
 
