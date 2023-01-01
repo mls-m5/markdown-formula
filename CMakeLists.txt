@@ -23,7 +23,7 @@ configure_file(
 configure_file(
     README.md
     .
-    COPY_ONLY
+    COPYONLY
     )
 
 
